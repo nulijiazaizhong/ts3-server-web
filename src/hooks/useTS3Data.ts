@@ -24,6 +24,19 @@ function mapClientsToUsers(clients: ClientInfo[], channels: ChannelInfo[]): User
     }));
 }
 
+// 计算每个频道的真实用户数
+function calculateRealChannelCounts(clients: ClientInfo[], channels: ChannelInfo[]): Map<string, number> {
+    const counts = new Map<string, number>();
+
+    // 统计每个频道的真实用户数
+    clients.forEach(client => {
+        const channelId = client.client_channel_id;
+        counts.set(channelId, (counts.get(channelId) || 0) + 1);
+    });
+
+    return counts;
+}
+
 export function useTS3Data(refreshInterval = 30000) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -33,9 +46,10 @@ export function useTS3Data(refreshInterval = 30000) {
         uptime: '加载中...',
         ping: 0,
         packetLoss: 0,
-        history: [],
     });
     const [users, setUsers] = useState<User[]>([]);
+    const [channels, setChannels] = useState<ChannelInfo[]>([]);
+    const [channelCounts, setChannelCounts] = useState<Map<string, number>>(new Map());
 
     const fetchData = useCallback(async () => {
         try {
@@ -48,10 +62,11 @@ export function useTS3Data(refreshInterval = 30000) {
                 uptime: formatUptime(data.server.virtualserver_uptime),
                 ping: Math.round(data.server.virtualserver_ping),
                 packetLoss: data.server.virtualserver_packetloss_speech,
-                history: data.history, // 使用服务端历史数据
             });
 
             setUsers(mapClientsToUsers(data.clients, data.channels));
+            setChannels(data.channels);
+            setChannelCounts(calculateRealChannelCounts(data.clients, data.channels));
             setError(null);
         } catch (err) {
             setError(err instanceof Error ? err.message : '获取数据失败');
@@ -66,5 +81,5 @@ export function useTS3Data(refreshInterval = 30000) {
         return () => clearInterval(interval);
     }, [refreshInterval, fetchData]);
 
-    return { loading, error, stats, users, refetch: fetchData };
+    return { loading, error, stats, users, channels, channelCounts, refetch: fetchData };
 }

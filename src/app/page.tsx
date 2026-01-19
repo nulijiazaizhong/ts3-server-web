@@ -4,7 +4,7 @@ import { useTS3Data } from '@/hooks/useTS3Data';
 import { Header } from '@/components/sections/Header';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { DownloadSection } from '@/components/sections/DownloadSection';
-import { StatsChart } from '@/components/sections/StatsChart';
+import { ChannelList } from '@/components/sections/ChannelList';
 import { UserList } from '@/components/sections/UserList';
 import { Footer } from '@/components/sections/Footer';
 import { FloatingIcons } from '@/components/FloatingIcons';
@@ -12,7 +12,13 @@ import { ParticleBackground } from '@/components/ParticleBackground';
 import { Users, Clock, Wifi, Signal } from 'lucide-react';
 
 export default function HomePage() {
-  const { loading, error, stats, users } = useTS3Data(30000);
+  const { loading, error, stats, users, channels, channelCounts } = useTS3Data(30000);
+
+  // 将真实人数合并到频道数据中
+  const channelsWithRealCounts = channels.map((channel) => ({
+    ...channel,
+    real_clients: channelCounts.get(channel.cid) || 0,
+  }));
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-fresh-bg">
@@ -69,9 +75,9 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Chart + Download - Bento Grid */}
+          {/* Channel + Download - Bento Grid */}
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <StatsChart loading={loading} stats={stats} />
+            <ChannelList loading={loading} channels={channelsWithRealCounts} />
             <DownloadSection />
           </section>
 

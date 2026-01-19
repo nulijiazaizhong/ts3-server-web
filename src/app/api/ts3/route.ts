@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerInfo, getClientList, getChannelList } from '@/lib/ts3-query';
-import { statsHistory } from '@/lib/stats-history';
 import { checkRateLimit } from '@/lib/rate-limit';
 import type { ServerInfo, ClientInfo, ChannelInfo } from '@/types/api';
 
@@ -9,7 +8,6 @@ interface AllData {
   server: ServerInfo;
   clients: ClientInfo[];
   channels: ChannelInfo[];
-  history: { time: string; count: number }[];
 }
 
 let allDataCache: { data: AllData; timestamp: number } | null = null;
@@ -68,14 +66,10 @@ async function fetchAllData(): Promise<AllData> {
     channel_order: c.channel_order,
   }));
 
-  // 记录历史
-  statsHistory.add(clients.length);
-
   const data: AllData = {
     server,
     clients,
     channels,
-    history: statsHistory.getHistory(),
   };
 
   allDataCache = { data, timestamp: Date.now() };
@@ -113,8 +107,6 @@ export async function GET(request: NextRequest) {
         return jsonResponse(allData.clients);
       case 'channellist':
         return jsonResponse(allData.channels);
-      case 'history':
-        return jsonResponse(allData.history);
       case 'all':
         return jsonResponse(allData);
       default:

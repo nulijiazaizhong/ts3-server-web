@@ -31,13 +31,6 @@ export interface ServerStats {
   uptime: string;
   ping: number;
   packetLoss: number;
-  history: StatsDataPoint[];
-}
-
-/** 统计数据点 */
-export interface StatsDataPoint {
-  time: string;
-  count: number;
 }
 
 /** 操作系统类型 */
