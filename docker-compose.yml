@@ -1,0 +1,9 @@
+services:
+  ts3-server-hub:
+    container_name: ts3-server-hub
+    image: ghcr.io/linmo-33/ts3-server-web:latest
+    env_file:
+      - .env.local
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

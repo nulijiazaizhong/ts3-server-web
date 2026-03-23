@@ -107,6 +107,39 @@ pnpm start
 2. 在 Settings → Environment Variables 配置环境变量
 3. 部署完成
 
+### Docker Compose
+
+1. 复制环境变量文件并按需修改：
+
+```bash
+cp .env.example .env.local
+```
+
+2. 拉取镜像：
+
+```bash
+docker pull ghcr.io/linmo-33/ts3-server-web:latest
+```
+
+3. 使用 [docker-compose.yml](./docker-compose.yml) 启动服务：
+
+```bash
+docker compose up -d
+```
+
+4. 查看运行状态与日志：
+
+```bash
+docker compose ps
+docker compose logs -f
+```
+
+5. 停止服务：
+
+```bash
+docker compose down
+```
+
 
 ## 项目结构
 
