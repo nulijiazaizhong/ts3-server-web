@@ -75,12 +75,14 @@ RATE_LIMIT_WINDOW_MS=60000             # 限流窗口
 RATE_LIMIT_MAX_REQUESTS=30             # 每窗口最大请求数
 
 # ==========================================
-# 客户端配置 (公开)
+# 页面显示配置 (公开，运行时读取)
 # ==========================================
-NEXT_PUBLIC_SERVER_NAME=我的服务器        # 显示的服务器名称
-NEXT_PUBLIC_SERVER_DESCRIPTION=欢迎加入   # 服务器描述
-NEXT_PUBLIC_SERVER_ADDRESS=ts.example.com # 显示的连接地址
+SERVER_NAME=我的服务器                  # 显示的服务器名称
+SERVER_DESCRIPTION=欢迎加入             # 服务器描述
+SERVER_ADDRESS=ts.example.com           # 显示的连接地址
 ```
+
+说明：页面展示配置在服务运行时读取，适合 Docker 直接使用预构建镜像部署。为了兼容旧配置，`NEXT_PUBLIC_SERVER_*` 仍然可用，但新部署建议改用 `SERVER_*`。
 
 ### 开发
 
@@ -127,6 +129,8 @@ docker pull ghcr.io/linmo-33/ts3-server-web:latest
 docker compose up -d
 ```
 
+`SERVER_*` 页面展示配置会在容器启动后由服务端运行时读取，不需要重新构建镜像。
+
 4. 查看运行状态与日志：
 
 ```bash
@@ -154,7 +158,7 @@ src/
 ├── hooks/              # 自定义 Hooks
 ├── lib/                # 工具库
 ├── types/              # TypeScript 类型
-└── constants/          # 常量配置
+└── ...                 # 其他模块
 ```
 
 ## License

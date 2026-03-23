@@ -1,16 +1,20 @@
 import React from "react";
 import { Copy, Check, ArrowRight } from "lucide-react";
-import { SERVER_CONFIG } from "@/constants/server";
+import type { ServerConfig } from "@/types";
 
-export const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  serverConfig: ServerConfig;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ serverConfig }) => {
   const [copied, setCopied] = React.useState(false);
 
   const handleConnect = () => {
-    window.location.href = `ts3server://${SERVER_CONFIG.address}`;
+    window.location.href = `ts3server://${serverConfig.address}`;
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(SERVER_CONFIG.address);
+    navigator.clipboard.writeText(serverConfig.address);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -66,7 +70,7 @@ export const HeroSection: React.FC = () => {
                 className="theme-input px-4 py-2.5 text-sm font-bold"
                 style={{ fontFamily: "var(--font-fredoka), Fredoka, sans-serif" }}
               >
-                {SERVER_CONFIG.address}
+                {serverConfig.address}
               </code>
               <button
                 onClick={handleCopy}

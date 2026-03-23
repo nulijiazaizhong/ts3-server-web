@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Fredoka, Noto_Sans_SC } from 'next/font/google';
+import { getServerConfig } from '@/lib/server-config';
 import './globals.css';
 
 const fredoka = Fredoka({
@@ -16,10 +17,16 @@ const notoSansSC = Noto_Sans_SC({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_SERVER_NAME || 'TeamSpeak Server Hub',
-  description: process.env.NEXT_PUBLIC_SERVER_DESCRIPTION || '欢迎来到我们的游戏语音社区，与队友实时沟通。',
-};
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const serverConfig = getServerConfig();
+
+  return {
+    title: serverConfig.name || 'TeamSpeak Server Hub',
+    description: serverConfig.description || '欢迎来到我们的游戏语音社区，与队友实时沟通。',
+  };
+}
 
 export default function RootLayout({
   children,

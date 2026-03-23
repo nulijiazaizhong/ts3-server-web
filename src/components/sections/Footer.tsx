@@ -1,8 +1,12 @@
 import React from "react";
-import { SERVER_CONFIG } from "@/constants/server";
 import { Heart } from "lucide-react";
+import type { ServerConfig } from "@/types";
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  serverConfig: ServerConfig;
+}
+
+export const Footer: React.FC<FooterProps> = ({ serverConfig }) => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -10,7 +14,7 @@ export const Footer: React.FC = () => {
       <div className="flex flex-col items-center justify-center gap-2 text-sm text-fresh-text-muted text-center">
         <p>
           &copy; {currentYear}{" "}
-          <span className="gradient-text font-bold">{SERVER_CONFIG.name}</span>
+          <span className="gradient-text font-bold">{serverConfig.name}</span>
         </p>
         <p className="flex items-center gap-1">
           Made with <Heart size={14} className="text-red-500 animate-pulse" />{" "}

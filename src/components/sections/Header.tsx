@@ -1,17 +1,19 @@
 import React from 'react';
 import { Zap, Users } from 'lucide-react';
-import { SERVER_CONFIG } from '@/constants/server';
+import type { ServerConfig } from '@/types';
 
 interface HeaderProps {
   loading: boolean;
   onlineCount: number;
   serverOnline: boolean;
+  serverConfig: ServerConfig;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   loading,
   onlineCount,
   serverOnline,
+  serverConfig,
 }) => {
   return (
     <header className="flex items-center justify-between">
@@ -25,10 +27,10 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Server Info */}
         <div>
           <h1 className="text-xl font-bold tracking-tight text-fresh-text">
-            {SERVER_CONFIG.name}
+            {serverConfig.name}
           </h1>
           <p className="text-sm text-fresh-text-muted">
-            {SERVER_CONFIG.description}
+            {serverConfig.description}
           </p>
         </div>
       </div>
